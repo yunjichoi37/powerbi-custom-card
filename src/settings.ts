@@ -288,7 +288,7 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
 
     placementGroup = new FormattingSettingsGroup({
         name: "placementGroup",
-        displayName: "배치",
+        displayName: "크기",
         slices: [this.cardWidth, this.cardHeight]
     });
 
