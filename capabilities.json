@@ -61,11 +61,33 @@
                         "bool": true
                     }
                 },
+                "titleFontFamily": {
+                    "type": {
+                        "formatting": {
+                            "fontFamily": true
+                        }
+                    }
+                },
                 "titleFontSize": {
                     "type": {
                         "formatting": {
                             "fontSize": true
                         }
+                    }
+                },
+                "titleBold": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "titleItalic": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "titleUnderline": {
+                    "type": {
+                        "bool": true
                     }
                 },
                 "titleColor": {
@@ -81,11 +103,33 @@
         },
         "valueFormat": {
             "properties": {
+                "fontFamily": {
+                    "type": {
+                        "formatting": {
+                            "fontFamily": true
+                        }
+                    }
+                },
                 "fontSize": {
                     "type": {
                         "formatting": {
                             "fontSize": true
                         }
+                    }
+                },
+                "bold": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "italic": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "underline": {
+                    "type": {
+                        "bool": true
                     }
                 },
                 "valueColor": {
@@ -183,6 +227,35 @@
         },
         "yoy": {
             "properties": {
+                "yoyFontFamily": {
+                    "type": {
+                        "formatting": {
+                            "fontFamily": true
+                        }
+                    }
+                },
+                "yoyFontSize": {
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "yoyBold": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "yoyItalic": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "yoyUnderline": {
+                    "type": {
+                        "bool": true
+                    }
+                },
                 "increaseColor": {
                     "type": {
                         "fill": {

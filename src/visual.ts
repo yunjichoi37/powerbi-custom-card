@@ -246,10 +246,28 @@ export class Visual implements IVisual {
             this.target.style.setProperty("--card-radius", `${this.formattingSettings.cardStyleSettings.cornerRadius.value}px`);
             this.target.style.setProperty("--card-column-gap", `${this.formattingSettings.layoutSettings.columnGap.value}px`);
             this.target.style.setProperty("--card-row-gap", `${this.formattingSettings.layoutSettings.rowGap.value}px`);
-            this.target.style.setProperty("--card-title-font-size", `${this.formattingSettings.cardTitleSettings.titleFontSize.value}px`);
+            const titleFont = this.formattingSettings.cardTitleSettings.titleFont;
+            this.target.style.setProperty("--card-title-font-family", titleFont.fontFamily.value);
+            this.target.style.setProperty("--card-title-font-size", `${titleFont.fontSize.value}px`);
+            this.target.style.setProperty("--card-title-font-weight", titleFont.bold.value ? "700" : "400");
+            this.target.style.setProperty("--card-title-font-style", titleFont.italic.value ? "italic" : "normal");
+            this.target.style.setProperty("--card-title-text-decoration", titleFont.underline.value ? "underline" : "none");
             this.target.style.setProperty("--card-title-color", this.formattingSettings.cardTitleSettings.titleColor.value.value);
-            this.target.style.setProperty("--card-value-font-size", `${this.formattingSettings.valueFormatSettings.fontSize.value}px`);
+
+            const valueFont = this.formattingSettings.valueFormatSettings.valueFont;
+            this.target.style.setProperty("--card-value-font-family", valueFont.fontFamily.value);
+            this.target.style.setProperty("--card-value-font-size", `${valueFont.fontSize.value}px`);
+            this.target.style.setProperty("--card-value-font-weight", valueFont.bold.value ? "700" : "600");
+            this.target.style.setProperty("--card-value-font-style", valueFont.italic.value ? "italic" : "normal");
+            this.target.style.setProperty("--card-value-text-decoration", valueFont.underline.value ? "underline" : "none");
             this.target.style.setProperty("--card-value-color", this.formattingSettings.valueFormatSettings.valueColor.value.value);
+
+            const yoyFont = this.formattingSettings.yoySettings.yoyFont;
+            this.target.style.setProperty("--card-yoy-font-family", yoyFont.fontFamily.value);
+            this.target.style.setProperty("--card-yoy-font-size", `${yoyFont.fontSize.value}px`);
+            this.target.style.setProperty("--card-yoy-font-weight", yoyFont.bold.value ? "700" : "400");
+            this.target.style.setProperty("--card-yoy-font-style", yoyFont.italic.value ? "italic" : "normal");
+            this.target.style.setProperty("--card-yoy-text-decoration", yoyFont.underline.value ? "underline" : "none");
 
             const isFixedLayout = String(this.formattingSettings.layoutSettings.layoutMode.value.value) === "fixed";
             this.formattingSettings.layoutSettings.columns.visible = isFixedLayout;

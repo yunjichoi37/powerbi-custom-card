@@ -74,8 +74,11 @@
 }
 
 .card-title {
+    font-family: var(--card-title-font-family, inherit);
     font-size: var(--card-title-font-size, 12px);
-    font-weight: 400;
+    font-weight: var(--card-title-font-weight, 400);
+    font-style: var(--card-title-font-style, normal);
+    text-decoration: var(--card-title-text-decoration, none);
     color: var(--card-title-color, #4E606F);
     white-space: nowrap;
     overflow: hidden;
@@ -83,8 +86,11 @@
 }
 
 .card-value {
+    font-family: var(--card-value-font-family, inherit);
     font-size: var(--card-value-font-size, 20px);
-    font-weight: 600;
+    font-weight: var(--card-value-font-weight, 600);
+    font-style: var(--card-value-font-style, normal);
+    text-decoration: var(--card-value-text-decoration, none);
     color: var(--card-value-color, #0A1317);
     white-space: nowrap;
     overflow: hidden;
@@ -104,8 +110,11 @@
 }
 
 .card-yoy {
-    font-size: 12px;
-    font-weight: 600;
+    font-family: var(--card-yoy-font-family, inherit);
+    font-size: var(--card-yoy-font-size, 12px);
+    font-weight: var(--card-yoy-font-weight, 600);
+    font-style: var(--card-yoy-font-style, normal);
+    text-decoration: var(--card-yoy-text-decoration, none);
     white-space: nowrap;
     flex-shrink: 0;
 }

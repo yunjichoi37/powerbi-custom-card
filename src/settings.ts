@@ -79,10 +79,29 @@ class CardTitleSettings extends FormattingSettingsCard {
         value: true
     });
 
-    titleFontSize = new formattingSettings.NumUpDown({
-        name: "titleFontSize",
-        displayName: "Title text size",
-        value: 12
+    titleFont = new formattingSettings.FontControl({
+        name: "titleFont",
+        displayName: "글꼴",
+        fontFamily: new formattingSettings.FontPicker({
+            name: "titleFontFamily",
+            value: "Segoe UI"
+        }),
+        fontSize: new formattingSettings.NumUpDown({
+            name: "titleFontSize",
+            value: 12
+        }),
+        bold: new formattingSettings.ToggleSwitch({
+            name: "titleBold",
+            value: false
+        }),
+        italic: new formattingSettings.ToggleSwitch({
+            name: "titleItalic",
+            value: false
+        }),
+        underline: new formattingSettings.ToggleSwitch({
+            name: "titleUnderline",
+            value: false
+        })
     });
 
     titleColor = new formattingSettings.ColorPicker({
@@ -94,14 +113,33 @@ class CardTitleSettings extends FormattingSettingsCard {
     name: string = "cardTitle";
     displayName: string = "카드 제목";
     topLevelSlice: FormattingSettingsSimpleSlice = this.showTitle;
-    slices: Array<FormattingSettingsSlice> = [this.titleFontSize, this.titleColor];
+    slices: Array<FormattingSettingsSlice> = [this.titleFont, this.titleColor];
 }
 
 class ValueFormatSettings extends FormattingSettingsCard {
-    fontSize = new formattingSettings.NumUpDown({
-        name: "fontSize",
-        displayName: "Value text size",
-        value: 20
+    valueFont = new formattingSettings.FontControl({
+        name: "valueFont",
+        displayName: "글꼴",
+        fontFamily: new formattingSettings.FontPicker({
+            name: "fontFamily",
+            value: "Segoe UI"
+        }),
+        fontSize: new formattingSettings.NumUpDown({
+            name: "fontSize",
+            value: 20
+        }),
+        bold: new formattingSettings.ToggleSwitch({
+            name: "bold",
+            value: false
+        }),
+        italic: new formattingSettings.ToggleSwitch({
+            name: "italic",
+            value: false
+        }),
+        underline: new formattingSettings.ToggleSwitch({
+            name: "underline",
+            value: false
+        })
     });
 
     valueColor = new formattingSettings.ColorPicker({
@@ -136,7 +174,7 @@ class ValueFormatSettings extends FormattingSettingsCard {
 
     name: string = "valueFormat";
     displayName: string = "값 표시";
-    slices: Array<FormattingSettingsSlice> = [this.fontSize, this.valueColor, this.decimalPlaces, this.koreanDisplayUnit];
+    slices: Array<FormattingSettingsSlice> = [this.valueFont, this.valueColor, this.decimalPlaces, this.koreanDisplayUnit];
 }
 
 class LayoutSettings extends FormattingSettingsCompositeCard {
@@ -272,6 +310,31 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
 }
 
 class YoySettings extends FormattingSettingsCard {
+    yoyFont = new formattingSettings.FontControl({
+        name: "yoyFont",
+        displayName: "글꼴",
+        fontFamily: new formattingSettings.FontPicker({
+            name: "yoyFontFamily",
+            value: "Segoe UI"
+        }),
+        fontSize: new formattingSettings.NumUpDown({
+            name: "yoyFontSize",
+            value: 12
+        }),
+        bold: new formattingSettings.ToggleSwitch({
+            name: "yoyBold",
+            value: true
+        }),
+        italic: new formattingSettings.ToggleSwitch({
+            name: "yoyItalic",
+            value: false
+        }),
+        underline: new formattingSettings.ToggleSwitch({
+            name: "yoyUnderline",
+            value: false
+        })
+    });
+
     increaseColor = new formattingSettings.ColorPicker({
         name: "increaseColor",
         displayName: "YoY increase color",
@@ -304,7 +367,7 @@ class YoySettings extends FormattingSettingsCard {
     name: string = "yoy";
     displayName: string = "전년 대비 (YoY)";
     topLevelSlice: FormattingSettingsSimpleSlice = this.showYoy;
-    slices: Array<FormattingSettingsSlice> = [this.increaseColor, this.decreaseColor, this.yoyPosition];
+    slices: Array<FormattingSettingsSlice> = [this.yoyFont, this.increaseColor, this.decreaseColor, this.yoyPosition];
 }
 
 export class VisualFormattingSettingsModel extends FormattingSettingsModel {
