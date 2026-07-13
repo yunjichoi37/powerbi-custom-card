@@ -9,6 +9,7 @@ import FormattingSettingsCard = formattingSettings.SimpleCard;
 import FormattingSettingsCompositeCard = formattingSettings.CompositeCard;
 import FormattingSettingsGroup = formattingSettings.Group;
 import FormattingSettingsSlice = formattingSettings.Slice;
+import FormattingSettingsSimpleSlice = formattingSettings.SimpleSlice;
 import FormattingSettingsModel = formattingSettings.Model;
 
 class CardStyleSettings extends FormattingSettingsCard {
@@ -86,7 +87,8 @@ class CardTitleSettings extends FormattingSettingsCard {
 
     name: string = "cardTitle";
     displayName: string = "카드 제목";
-    slices: Array<FormattingSettingsSlice> = [this.showTitle, this.titleFontSize, this.titleColor];
+    topLevelSlice: FormattingSettingsSimpleSlice = this.showTitle;
+    slices: Array<FormattingSettingsSlice> = [this.titleFontSize, this.titleColor];
 }
 
 class ValueFormatSettings extends FormattingSettingsCard {
@@ -277,7 +279,8 @@ class YoySettings extends FormattingSettingsCard {
 
     name: string = "yoy";
     displayName: string = "전년 대비 (YoY)";
-    slices: Array<FormattingSettingsSlice> = [this.showYoy, this.increaseColor, this.decreaseColor, this.yoyPosition];
+    topLevelSlice: FormattingSettingsSimpleSlice = this.showYoy;
+    slices: Array<FormattingSettingsSlice> = [this.increaseColor, this.decreaseColor, this.yoyPosition];
 }
 
 export class VisualFormattingSettingsModel extends FormattingSettingsModel {
