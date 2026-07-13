@@ -12,7 +12,7 @@ import FormattingSettingsSlice = formattingSettings.Slice;
 import FormattingSettingsSimpleSlice = formattingSettings.SimpleSlice;
 import FormattingSettingsModel = formattingSettings.Model;
 
-class CardStyleSettings extends FormattingSettingsCard {
+class CardStyleSettings extends FormattingSettingsCompositeCard {
     backgroundColor = new formattingSettings.ColorPicker({
         name: "backgroundColor",
         displayName: "Background color",
@@ -67,9 +67,27 @@ class CardStyleSettings extends FormattingSettingsCard {
         value: 12
     });
 
+    backgroundGroup = new FormattingSettingsGroup({
+        name: "backgroundGroup",
+        displayName: "배경",
+        slices: [this.backgroundColor, this.backgroundTransparency]
+    });
+
+    borderGroup = new FormattingSettingsGroup({
+        name: "borderGroup",
+        displayName: "테두리",
+        slices: [this.accentColor, this.borderWidth, this.cornerRadius]
+    });
+
+    gapGroup = new FormattingSettingsGroup({
+        name: "gapGroup",
+        displayName: "카드 간 여백",
+        slices: [this.columnGap, this.rowGap]
+    });
+
     name: string = "cardStyle";
     displayName: string = "카드 스타일";
-    slices: Array<FormattingSettingsSlice> = [this.backgroundColor, this.backgroundTransparency, this.accentColor, this.borderWidth, this.cornerRadius, this.columnGap, this.rowGap];
+    groups: Array<FormattingSettingsGroup> = [this.backgroundGroup, this.borderGroup, this.gapGroup];
 }
 
 class CardTitleSettings extends FormattingSettingsCard {
