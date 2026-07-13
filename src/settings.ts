@@ -237,44 +237,45 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
         value: { value: "auto", displayName: "자동" }
     });
 
-    paddingTop = new formattingSettings.NumUpDown({
-        name: "paddingTop",
-        displayName: "Padding top",
-        value: 16,
-        options: {
-            minValue: { type: ValidatorType.Min, value: 0 },
-            maxValue: { type: ValidatorType.Max, value: 60 }
-        }
-    });
-
-    paddingRight = new formattingSettings.NumUpDown({
-        name: "paddingRight",
-        displayName: "Padding right",
-        value: 16,
-        options: {
-            minValue: { type: ValidatorType.Min, value: 0 },
-            maxValue: { type: ValidatorType.Max, value: 60 }
-        }
-    });
-
-    paddingBottom = new formattingSettings.NumUpDown({
-        name: "paddingBottom",
-        displayName: "Padding bottom",
-        value: 16,
-        options: {
-            minValue: { type: ValidatorType.Min, value: 0 },
-            maxValue: { type: ValidatorType.Max, value: 60 }
-        }
-    });
-
-    paddingLeft = new formattingSettings.NumUpDown({
-        name: "paddingLeft",
-        displayName: "Padding left",
-        value: 16,
-        options: {
-            minValue: { type: ValidatorType.Min, value: 0 },
-            maxValue: { type: ValidatorType.Max, value: 60 }
-        }
+    paddingBox = new formattingSettings.MarginPadding({
+        name: "paddingBox",
+        displayName: "안쪽 여백",
+        top: new formattingSettings.NumUpDown({
+            name: "paddingTop",
+            displayName: "Padding top",
+            value: 16,
+            options: {
+                minValue: { type: ValidatorType.Min, value: 0 },
+                maxValue: { type: ValidatorType.Max, value: 60 }
+            }
+        }),
+        right: new formattingSettings.NumUpDown({
+            name: "paddingRight",
+            displayName: "Padding right",
+            value: 16,
+            options: {
+                minValue: { type: ValidatorType.Min, value: 0 },
+                maxValue: { type: ValidatorType.Max, value: 60 }
+            }
+        }),
+        bottom: new formattingSettings.NumUpDown({
+            name: "paddingBottom",
+            displayName: "Padding bottom",
+            value: 16,
+            options: {
+                minValue: { type: ValidatorType.Min, value: 0 },
+                maxValue: { type: ValidatorType.Max, value: 60 }
+            }
+        }),
+        left: new formattingSettings.NumUpDown({
+            name: "paddingLeft",
+            displayName: "Padding left",
+            value: 16,
+            options: {
+                minValue: { type: ValidatorType.Min, value: 0 },
+                maxValue: { type: ValidatorType.Max, value: 60 }
+            }
+        })
     });
 
     columnGap = new formattingSettings.NumUpDown({
@@ -351,7 +352,7 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
     paddingGroup = new FormattingSettingsGroup({
         name: "paddingGroup",
         displayName: "여백",
-        slices: [this.paddingMode, this.paddingTop, this.paddingRight, this.paddingBottom, this.paddingLeft]
+        slices: [this.paddingMode, this.paddingBox]
     });
 
     cardGapGroup = new FormattingSettingsGroup({

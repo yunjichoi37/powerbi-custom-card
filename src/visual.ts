@@ -311,18 +311,16 @@ export class Visual implements IVisual {
             this.target.style.setProperty("--card-height", `${this.formattingSettings.layoutSettings.cardHeight.value}px`);
 
             const isManualPadding = String(this.formattingSettings.layoutSettings.paddingMode.value.value) === "manual";
-            this.formattingSettings.layoutSettings.paddingTop.visible = isManualPadding;
-            this.formattingSettings.layoutSettings.paddingRight.visible = isManualPadding;
-            this.formattingSettings.layoutSettings.paddingBottom.visible = isManualPadding;
-            this.formattingSettings.layoutSettings.paddingLeft.visible = isManualPadding;
+            this.formattingSettings.layoutSettings.paddingBox.visible = isManualPadding;
 
             // When manual, these overrides win via CSS var() fallback; when auto, clearing
             // them lets the card-size-based clamp() formulas in visual.less take back over.
             if (isManualPadding) {
-                this.target.style.setProperty("--card-padding-top", `${this.formattingSettings.layoutSettings.paddingTop.value}px`);
-                this.target.style.setProperty("--card-padding-right", `${this.formattingSettings.layoutSettings.paddingRight.value}px`);
-                this.target.style.setProperty("--card-padding-bottom", `${this.formattingSettings.layoutSettings.paddingBottom.value}px`);
-                this.target.style.setProperty("--card-padding-left", `${this.formattingSettings.layoutSettings.paddingLeft.value}px`);
+                const paddingBox = this.formattingSettings.layoutSettings.paddingBox;
+                this.target.style.setProperty("--card-padding-top", `${paddingBox.top.value}px`);
+                this.target.style.setProperty("--card-padding-right", `${paddingBox.right.value}px`);
+                this.target.style.setProperty("--card-padding-bottom", `${paddingBox.bottom.value}px`);
+                this.target.style.setProperty("--card-padding-left", `${paddingBox.left.value}px`);
             } else {
                 this.target.style.removeProperty("--card-padding-top");
                 this.target.style.removeProperty("--card-padding-right");
