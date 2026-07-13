@@ -5,8 +5,8 @@ Power BI용 커스텀 카드 리스트 비주얼.
 
 |예시| 이미지 |
 |---|---|
-|Category 지정|![Category 지정](image.png)|
-|Category 미지정|![Category 미지정](image-1.png)|
+|Category 지정|![Category 지정](docs/images/image.png)|
+|Category 미지정|![Category 미지정](docs/images/image-1.png)|
 
 ---
 
