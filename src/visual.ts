@@ -98,6 +98,7 @@ export class Visual implements IVisual {
     private events: IVisualEventService;
     private host: IVisualHost;
     private target: HTMLElement;
+    private grid: HTMLElement;
     private tooltipServiceWrapper: ITooltipServiceWrapper;
     private selectionManager: ISelectionManager;
     private cardElements: Array<{ element: HTMLElement; selectionId: ISelectionId }>;
@@ -110,6 +111,9 @@ export class Visual implements IVisual {
         this.formattingSettingsService = new FormattingSettingsService();
         this.target = options.element;
         this.target.classList.add("card-list");
+        this.grid = document.createElement("div");
+        this.grid.className = "card-grid";
+        this.target.appendChild(this.grid);
         this.tooltipServiceWrapper = createTooltipServiceWrapper(this.host.tooltipService, this.target);
         this.selectionManager = this.host.createSelectionManager();
         this.cardElements = [];
@@ -201,7 +205,7 @@ export class Visual implements IVisual {
             }
         }
 
-        this.target.appendChild(card);
+        this.grid.appendChild(card);
 
         const cardSelection = d3.select(card).datum(dataPoint);
         this.tooltipServiceWrapper.addTooltip<CardDataPoint>(
@@ -232,7 +236,7 @@ export class Visual implements IVisual {
             const dataView = options.dataViews && options.dataViews[0];
             this.formattingSettings = this.formattingSettingsService.populateFormattingSettingsModel(VisualFormattingSettingsModel, dataView);
 
-            this.target.replaceChildren();
+            this.grid.replaceChildren();
             this.cardElements = [];
             this.target.style.width = `${options.viewport.width}px`;
             this.target.style.height = `${options.viewport.height}px`;
