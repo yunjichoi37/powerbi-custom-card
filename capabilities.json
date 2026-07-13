@@ -51,16 +51,6 @@
                     "type": {
                         "numeric": true
                     }
-                },
-                "columnGap": {
-                    "type": {
-                        "numeric": true
-                    }
-                },
-                "rowGap": {
-                    "type": {
-                        "numeric": true
-                    }
                 }
             }
         },
@@ -175,6 +165,16 @@
                     }
                 },
                 "paddingLeft": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "columnGap": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "rowGap": {
                     "type": {
                         "numeric": true
                     }

@@ -55,18 +55,6 @@ class CardStyleSettings extends FormattingSettingsCompositeCard {
         }
     });
 
-    columnGap = new formattingSettings.NumUpDown({
-        name: "columnGap",
-        displayName: "가로 여백",
-        value: 12
-    });
-
-    rowGap = new formattingSettings.NumUpDown({
-        name: "rowGap",
-        displayName: "세로 여백",
-        value: 12
-    });
-
     backgroundGroup = new FormattingSettingsGroup({
         name: "backgroundGroup",
         displayName: "배경",
@@ -79,15 +67,9 @@ class CardStyleSettings extends FormattingSettingsCompositeCard {
         slices: [this.accentColor, this.borderWidth, this.cornerRadius]
     });
 
-    gapGroup = new FormattingSettingsGroup({
-        name: "gapGroup",
-        displayName: "카드 간 여백",
-        slices: [this.columnGap, this.rowGap]
-    });
-
     name: string = "cardStyle";
     displayName: string = "카드 스타일";
-    groups: Array<FormattingSettingsGroup> = [this.backgroundGroup, this.borderGroup, this.gapGroup];
+    groups: Array<FormattingSettingsGroup> = [this.backgroundGroup, this.borderGroup];
 }
 
 class CardTitleSettings extends FormattingSettingsCard {
@@ -248,6 +230,18 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
         }
     });
 
+    columnGap = new formattingSettings.NumUpDown({
+        name: "columnGap",
+        displayName: "좌우 여백",
+        value: 12
+    });
+
+    rowGap = new formattingSettings.NumUpDown({
+        name: "rowGap",
+        displayName: "상하 여백",
+        value: 12
+    });
+
     layoutGroup = new FormattingSettingsGroup({
         name: "layoutGroup",
         displayName: "Layout",
@@ -266,9 +260,15 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
         slices: [this.paddingMode, this.paddingTop, this.paddingRight, this.paddingBottom, this.paddingLeft]
     });
 
+    cardGapGroup = new FormattingSettingsGroup({
+        name: "cardGapGroup",
+        displayName: "카드 간 여백",
+        slices: [this.columnGap, this.rowGap]
+    });
+
     name: string = "layout";
     displayName: string = "레이아웃";
-    groups: Array<FormattingSettingsGroup> = [this.layoutGroup, this.placementGroup, this.paddingGroup];
+    groups: Array<FormattingSettingsGroup> = [this.layoutGroup, this.placementGroup, this.paddingGroup, this.cardGapGroup];
 }
 
 class YoySettings extends FormattingSettingsCard {

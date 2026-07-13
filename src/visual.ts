@@ -244,8 +244,8 @@ export class Visual implements IVisual {
             ));
             this.target.style.setProperty("--card-border-width", `${this.formattingSettings.cardStyleSettings.borderWidth.value}px`);
             this.target.style.setProperty("--card-radius", `${this.formattingSettings.cardStyleSettings.cornerRadius.value}px`);
-            this.target.style.setProperty("--card-column-gap", `${this.formattingSettings.cardStyleSettings.columnGap.value}px`);
-            this.target.style.setProperty("--card-row-gap", `${this.formattingSettings.cardStyleSettings.rowGap.value}px`);
+            this.target.style.setProperty("--card-column-gap", `${this.formattingSettings.layoutSettings.columnGap.value}px`);
+            this.target.style.setProperty("--card-row-gap", `${this.formattingSettings.layoutSettings.rowGap.value}px`);
             this.target.style.setProperty("--card-title-font-size", `${this.formattingSettings.cardTitleSettings.titleFontSize.value}px`);
             this.target.style.setProperty("--card-title-color", this.formattingSettings.cardTitleSettings.titleColor.value.value);
             this.target.style.setProperty("--card-value-font-size", `${this.formattingSettings.valueFormatSettings.fontSize.value}px`);
