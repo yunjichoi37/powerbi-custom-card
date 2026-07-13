@@ -52,7 +52,12 @@
                         "numeric": true
                     }
                 },
-                "cardGap": {
+                "columnGap": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "rowGap": {
                     "type": {
                         "numeric": true
                     }

@@ -55,15 +55,21 @@ class CardStyleSettings extends FormattingSettingsCard {
         }
     });
 
-    cardGap = new formattingSettings.NumUpDown({
-        name: "cardGap",
-        displayName: "Card spacing",
+    columnGap = new formattingSettings.NumUpDown({
+        name: "columnGap",
+        displayName: "가로 여백",
+        value: 12
+    });
+
+    rowGap = new formattingSettings.NumUpDown({
+        name: "rowGap",
+        displayName: "세로 여백",
         value: 12
     });
 
     name: string = "cardStyle";
     displayName: string = "카드 스타일";
-    slices: Array<FormattingSettingsSlice> = [this.backgroundColor, this.backgroundTransparency, this.accentColor, this.borderWidth, this.cornerRadius, this.cardGap];
+    slices: Array<FormattingSettingsSlice> = [this.backgroundColor, this.backgroundTransparency, this.accentColor, this.borderWidth, this.cornerRadius, this.columnGap, this.rowGap];
 }
 
 class CardTitleSettings extends FormattingSettingsCard {
