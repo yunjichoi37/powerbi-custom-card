@@ -222,6 +222,31 @@
                     "type": {
                         "numeric": true
                     }
+                },
+                "gridRows": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "gridColumns": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "titlePosition": {
+                    "type": {
+                        "enumeration": []
+                    }
+                },
+                "valuePosition": {
+                    "type": {
+                        "enumeration": []
+                    }
+                },
+                "yoyPosition": {
+                    "type": {
+                        "enumeration": []
+                    }
                 }
             }
         },
@@ -272,15 +297,6 @@
                                 "color": true
                             }
                         }
-                    }
-                },
-                "yoyPosition": {
-                    "type": {
-                        "enumeration": [
-                            { "value": "belowValue", "displayName": "값 아래" },
-                            { "value": "rightOfValue", "displayName": "값 오른쪽" },
-                            { "value": "rightOfTitle", "displayName": "제목 오른쪽" }
-                        ]
                     }
                 },
                 "showYoy": {

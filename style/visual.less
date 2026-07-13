@@ -48,14 +48,12 @@
     min-width: 140px;
     flex: 1 1 140px;
     height: var(--card-height, 100px);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    // Title stays pinned to the top, the last row stays pinned to the bottom, and
-    // any leftover vertical space is split evenly between whatever rows exist in
-    // between (title / value / yoy, however many there are for the current YoY
-    // position). `gap` guarantees a minimum spacing; space-between distributes the
-    // rest. Font sizes are never touched — only spacing scales with card size.
+    display: grid;
+    grid-template-rows: repeat(var(--card-grid-rows, 3), 1fr);
+    grid-template-columns: repeat(var(--card-grid-columns, 1), 1fr);
+    // Title/value/yoy are each placed in a cell of this grid (see .card-cell below).
+    // `gap` guarantees minimum spacing between cells; the 1fr tracks split the rest
+    // of the card evenly. Font sizes are never touched — only spacing scales with card size.
     gap: clamp(2px, calc(var(--card-height, 100px) * 0.04), 4px);
     // Each side falls back to a card-size-based clamp() when the user picks "자동".
     // Picking "직접 지정" makes visual.ts set --card-padding-* directly, which wins here.
@@ -110,15 +108,15 @@
     text-overflow: ellipsis;
 }
 
-.card-row {
+.card-cell {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    min-height: 0;
 }
 
-.card-row .card-title,
-.card-row .card-value {
+.card-cell > * {
     min-width: 0;
 }
 

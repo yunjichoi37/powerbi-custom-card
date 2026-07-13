@@ -12,6 +12,15 @@ import FormattingSettingsSlice = formattingSettings.Slice;
 import FormattingSettingsSimpleSlice = formattingSettings.SimpleSlice;
 import FormattingSettingsModel = formattingSettings.Model;
 
+// Declared as the full 3x3 range (the max grid size gridRows/gridColumns allow) so that
+// FormattingSettingsService can resolve any previously-saved "row,col" position against
+// this list when the model is first populated — before visual.ts narrows `.items` down to
+// the currently configured grid size in update(). If this list only covered the default
+// grid shape, a saved position outside it would fail to resolve to a valid item and crash.
+const ALL_GRID_CELL_ITEMS: powerbi.IEnumMember[] = [1, 2, 3].flatMap(row =>
+    [1, 2, 3].map(col => ({ value: `${row},${col}`, displayName: `${row}행 ${col}열` }))
+);
+
 class CardStyleSettings extends FormattingSettingsCompositeCard {
     backgroundColor = new formattingSettings.ColorPicker({
         name: "backgroundColor",
@@ -280,6 +289,47 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
         value: 12
     });
 
+    gridRows = new formattingSettings.NumUpDown({
+        name: "gridRows",
+        displayName: "행 수",
+        value: 3,
+        options: {
+            minValue: { type: ValidatorType.Min, value: 1 },
+            maxValue: { type: ValidatorType.Max, value: 3 }
+        }
+    });
+
+    gridColumns = new formattingSettings.NumUpDown({
+        name: "gridColumns",
+        displayName: "열 수",
+        value: 1,
+        options: {
+            minValue: { type: ValidatorType.Min, value: 1 },
+            maxValue: { type: ValidatorType.Max, value: 3 }
+        }
+    });
+
+    titlePosition = new formattingSettings.ItemDropdown({
+        name: "titlePosition",
+        displayName: "제목 위치",
+        items: ALL_GRID_CELL_ITEMS,
+        value: { value: "1,1", displayName: "1행 1열" }
+    });
+
+    valuePosition = new formattingSettings.ItemDropdown({
+        name: "valuePosition",
+        displayName: "값 위치",
+        items: ALL_GRID_CELL_ITEMS,
+        value: { value: "2,1", displayName: "2행 1열" }
+    });
+
+    yoyPosition = new formattingSettings.ItemDropdown({
+        name: "yoyPosition",
+        displayName: "YoY 위치",
+        items: ALL_GRID_CELL_ITEMS,
+        value: { value: "3,1", displayName: "3행 1열" }
+    });
+
     layoutGroup = new FormattingSettingsGroup({
         name: "layoutGroup",
         displayName: "Layout",
@@ -290,6 +340,12 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
         name: "placementGroup",
         displayName: "크기",
         slices: [this.cardWidth, this.cardHeight]
+    });
+
+    positionGroup = new FormattingSettingsGroup({
+        name: "positionGroup",
+        displayName: "요소 배치",
+        slices: [this.gridRows, this.gridColumns, this.titlePosition, this.valuePosition, this.yoyPosition]
     });
 
     paddingGroup = new FormattingSettingsGroup({
@@ -306,7 +362,7 @@ class LayoutSettings extends FormattingSettingsCompositeCard {
 
     name: string = "layout";
     displayName: string = "레이아웃";
-    groups: Array<FormattingSettingsGroup> = [this.layoutGroup, this.placementGroup, this.paddingGroup, this.cardGapGroup];
+    groups: Array<FormattingSettingsGroup> = [this.layoutGroup, this.placementGroup, this.positionGroup, this.paddingGroup, this.cardGapGroup];
 }
 
 class YoySettings extends FormattingSettingsCard {
@@ -347,17 +403,6 @@ class YoySettings extends FormattingSettingsCard {
         value: { value: "#118DFF" }
     });
 
-    yoyPosition = new formattingSettings.ItemDropdown({
-        name: "yoyPosition",
-        displayName: "YoY position",
-        items: [
-            { value: "belowValue", displayName: "값 아래" },
-            { value: "rightOfValue", displayName: "값 오른쪽" },
-            { value: "rightOfTitle", displayName: "제목 오른쪽" }
-        ],
-        value: { value: "belowValue", displayName: "값 아래" }
-    });
-
     showYoy = new formattingSettings.ToggleSwitch({
         name: "showYoy",
         displayName: "Show YoY",
@@ -367,7 +412,7 @@ class YoySettings extends FormattingSettingsCard {
     name: string = "yoy";
     displayName: string = "전년 대비 (YoY)";
     topLevelSlice: FormattingSettingsSimpleSlice = this.showYoy;
-    slices: Array<FormattingSettingsSlice> = [this.yoyFont, this.increaseColor, this.decreaseColor, this.yoyPosition];
+    slices: Array<FormattingSettingsSlice> = [this.yoyFont, this.increaseColor, this.decreaseColor];
 }
 
 export class VisualFormattingSettingsModel extends FormattingSettingsModel {

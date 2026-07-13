@@ -37,11 +37,33 @@ function getFillColor(value: powerbi.DataViewPropertyValue | undefined, fallback
     return fill?.solid?.color ?? fallback;
 }
 
-const YOY_POSITION_ITEMS: powerbi.IEnumMember[] = [
-    { value: "belowValue", displayName: "값 아래" },
-    { value: "rightOfValue", displayName: "값 오른쪽" },
-    { value: "rightOfTitle", displayName: "제목 오른쪽" }
-];
+interface CellPos {
+    row: number;
+    col: number;
+}
+
+interface CardPositionConfig {
+    title: CellPos;
+    value: CellPos;
+    yoy: CellPos;
+    gridRows: number;
+    gridColumns: number;
+}
+
+function parseCellPos(value: string): CellPos {
+    const [row, col] = value.split(",").map(part => Number(part));
+    return { row: row || 1, col: col || 1 };
+}
+
+// Cells at the first/last row or column pin their content to that edge (like a 9-point
+// anchor); interior cells stay centered. This keeps free placement feeling like "anchoring
+// to a spot on the card" instead of just picking an arbitrary equal-sized grid cell.
+function edgeAlign(index: number, total: number): string {
+    if (total <= 1 || (index > 1 && index < total)) {
+        return "center";
+    }
+    return index === 1 ? "start" : "end";
+}
 
 function hexToRgba(hex: string, transparencyPercent: number): string {
     const match = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -151,7 +173,7 @@ export class Visual implements IVisual {
         yoyDirection: "up" | "down" | null,
         tooltipRows: VisualTooltipDataItem[],
         selectionId: ISelectionId,
-        yoyPosition: string,
+        position: CardPositionConfig,
         allowInteractions: boolean,
         increaseColor: string,
         decreaseColor: string,
@@ -179,31 +201,38 @@ export class Visual implements IVisual {
             yoy.textContent = yoyText;
         }
 
-        if (yoy && title && yoyPosition === "rightOfTitle") {
-            const titleRow = document.createElement("div");
-            titleRow.className = "card-row";
-            titleRow.appendChild(title);
-            titleRow.appendChild(yoy);
-            card.appendChild(titleRow);
-            card.appendChild(value);
-        } else if (yoy && yoyPosition === "rightOfValue") {
-            if (title) {
-                card.appendChild(title);
+        // Elements sharing a cell stack title → value → yoy (this insertion order), aligned
+        // toward whichever edge (or center) that cell's row/column sits at in the grid.
+        const cells = new Map<string, { pos: CellPos; elements: HTMLElement[] }>();
+        const placeInCell = (pos: CellPos, element: HTMLElement | null) => {
+            if (!element) {
+                return;
             }
-            const valueRow = document.createElement("div");
-            valueRow.className = "card-row";
-            valueRow.appendChild(value);
-            valueRow.appendChild(yoy);
-            card.appendChild(valueRow);
-        } else {
-            if (title) {
-                card.appendChild(title);
+            const key = `${pos.row},${pos.col}`;
+            const cell = cells.get(key);
+            if (cell) {
+                cell.elements.push(element);
+            } else {
+                cells.set(key, { pos, elements: [element] });
             }
-            card.appendChild(value);
-            if (yoy) {
-                card.appendChild(yoy);
-            }
-        }
+        };
+        placeInCell(position.title, title);
+        placeInCell(position.value, value);
+        placeInCell(position.yoy, yoy);
+
+        cells.forEach(cell => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "card-cell";
+            wrapper.style.gridRow = `${cell.pos.row}`;
+            wrapper.style.gridColumn = `${cell.pos.col}`;
+            const horizontalAlign = edgeAlign(cell.pos.col, position.gridColumns);
+            const verticalAlign = edgeAlign(cell.pos.row, position.gridRows);
+            wrapper.style.justifySelf = horizontalAlign;
+            wrapper.style.alignSelf = verticalAlign;
+            wrapper.style.alignItems = horizontalAlign === "start" ? "flex-start" : horizontalAlign === "end" ? "flex-end" : "center";
+            cell.elements.forEach(element => wrapper.appendChild(element));
+            card.appendChild(wrapper);
+        });
 
         this.grid.appendChild(card);
 
@@ -301,6 +330,38 @@ export class Visual implements IVisual {
                 this.target.style.removeProperty("--card-padding-left");
             }
 
+            const gridRows = this.formattingSettings.layoutSettings.gridRows.value;
+            const gridColumns = this.formattingSettings.layoutSettings.gridColumns.value;
+            this.target.style.setProperty("--card-grid-rows", `${gridRows}`);
+            this.target.style.setProperty("--card-grid-columns", `${gridColumns}`);
+
+            const cellItems: powerbi.IEnumMember[] = [];
+            for (let row = 1; row <= gridRows; row++) {
+                for (let col = 1; col <= gridColumns; col++) {
+                    cellItems.push({ value: `${row},${col}`, displayName: `${row}행 ${col}열` });
+                }
+            }
+
+            // If the saved position no longer exists (e.g. the grid shrank since it was
+            // picked), fall back to a sensible default cell for that element instead of
+            // erroring — same "reset to default" approach used elsewhere in this file.
+            const resolvePosition = (slice: formattingSettings.ItemDropdown, fallback: string): CellPos => {
+                const fallbackItem = cellItems.find(item => item.value === fallback) ?? cellItems[0];
+                const savedValue = slice.value?.value;
+                const current = (savedValue != null && cellItems.find(item => item.value === String(savedValue))) || fallbackItem;
+                slice.items = cellItems;
+                slice.value = current;
+                return parseCellPos(String(current.value));
+            };
+
+            const positionConfig: CardPositionConfig = {
+                title: resolvePosition(this.formattingSettings.layoutSettings.titlePosition, "1,1"),
+                value: resolvePosition(this.formattingSettings.layoutSettings.valuePosition, `${Math.ceil(gridRows / 2)},${Math.ceil(gridColumns / 2)}`),
+                yoy: resolvePosition(this.formattingSettings.layoutSettings.yoyPosition, `${gridRows},${gridColumns}`),
+                gridRows,
+                gridColumns
+            };
+
             const categorical = dataView && dataView.categorical;
             const categoryColumn = categorical && categorical.categories && categorical.categories[0];
             const measureColumns = findColumnsByRole(categorical?.values, "measure");
@@ -309,7 +370,6 @@ export class Visual implements IVisual {
             const isKorean = this.host.locale?.toLowerCase().startsWith("ko");
             const koreanUnit = String(this.formattingSettings.valueFormatSettings.koreanDisplayUnit.value.value);
             const decimalPlaces = this.formattingSettings.valueFormatSettings.decimalPlaces.value;
-            const yoyPosition = String(this.formattingSettings.yoySettings.yoyPosition.value.value);
             const showYoy = this.formattingSettings.yoySettings.showYoy.value;
             const showTitle = this.formattingSettings.cardTitleSettings.showTitle.value;
             const globalIncreaseColor = this.formattingSettings.yoySettings.increaseColor.value.value;
@@ -368,7 +428,7 @@ export class Visual implements IVisual {
                             { displayName: measureDisplayName, value: formattedValue }
                         ],
                         selectionId,
-                        yoyPosition,
+                        positionConfig,
                         allowInteractions,
                         globalIncreaseColor,
                         globalDecreaseColor,
@@ -403,8 +463,6 @@ export class Visual implements IVisual {
 
                     const itemIncreaseColor = getFillColor(savedObjects?.increaseColor, globalIncreaseColor);
                     const itemDecreaseColor = getFillColor(savedObjects?.decreaseColor, globalDecreaseColor);
-                    const itemYoyPosition = savedObjects?.yoyPosition != null ? String(savedObjects.yoyPosition) : yoyPosition;
-                    const selectedPositionItem = YOY_POSITION_ITEMS.find(item => item.value === itemYoyPosition) ?? YOY_POSITION_ITEMS[0];
 
                     const selector = { metadata: column.source.queryName } as powerbi.data.Selector;
 
@@ -437,17 +495,9 @@ export class Visual implements IVisual {
                         selector
                     });
 
-                    const positionDropdown = new formattingSettings.ItemDropdown({
-                        name: "yoyPosition",
-                        displayName: "YoY position",
-                        items: YOY_POSITION_ITEMS,
-                        value: selectedPositionItem,
-                        selector
-                    });
-
                     containerItems.push({
                         displayName: column.source.displayName,
-                        slices: [showToggle, pairedDropdown, increaseColorPicker, decreaseColorPicker, positionDropdown]
+                        slices: [showToggle, pairedDropdown, increaseColorPicker, decreaseColorPicker]
                     } as formattingSettings.ContainerItem);
 
                     const rawValue = column.values[0];
@@ -471,7 +521,7 @@ export class Visual implements IVisual {
                         yoyDirection,
                         [{ displayName: titleText, value: formattedValue }],
                         selectionId,
-                        itemYoyPosition,
+                        positionConfig,
                         allowInteractions,
                         itemIncreaseColor,
                         itemDecreaseColor,
@@ -492,11 +542,10 @@ export class Visual implements IVisual {
             // Container doesn't merge with the card's own top-level slices into a single
             // "적용 대상: 모두" selector — it just adds its own dropdown + slices block
             // underneath. So once the per-item container appears, hide the top-level
-            // increase/decrease/position controls to avoid showing both at once.
+            // increase/decrease controls to avoid showing both at once.
             const hasYoyContainer = !!this.formattingSettings.yoySettings.container;
             this.formattingSettings.yoySettings.increaseColor.visible = !hasYoyContainer;
             this.formattingSettings.yoySettings.decreaseColor.visible = !hasYoyContainer;
-            this.formattingSettings.yoySettings.yoyPosition.visible = !hasYoyContainer;
 
             this.syncSelectionStyles(this.selectionManager.getSelectionIds() as unknown as ISelectionId[]);
 
