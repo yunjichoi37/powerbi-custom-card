@@ -1,0 +1,260 @@
+{
+    "dataRoles": [
+        {
+            "displayName": "Category",
+            "name": "category",
+            "kind": "Grouping"
+        },
+        {
+            "displayName": "Value",
+            "name": "measure",
+            "kind": "Measure"
+        },
+        {
+            "displayName": "Prior Period Value",
+            "name": "priorMeasure",
+            "kind": "Measure"
+        }
+    ],
+    "objects": {
+        "cardStyle": {
+            "properties": {
+                "backgroundColor": {
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "backgroundTransparency": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "accentColor": {
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "borderWidth": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "cornerRadius": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "cardGap": {
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        },
+        "cardTitle": {
+            "properties": {
+                "showTitle": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "titleFontSize": {
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "titleColor": {
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "valueFormat": {
+            "properties": {
+                "fontSize": {
+                    "type": {
+                        "formatting": {
+                            "fontSize": true
+                        }
+                    }
+                },
+                "valueColor": {
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "decimalPlaces": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "koreanDisplayUnit": {
+                    "type": {
+                        "enumeration": [
+                            { "value": "auto", "displayName": "자동" },
+                            { "value": "none", "displayName": "없음" },
+                            { "value": "thousand", "displayName": "천" },
+                            { "value": "tenThousand", "displayName": "만" },
+                            { "value": "hundredMillion", "displayName": "억" },
+                            { "value": "trillion", "displayName": "조" }
+                        ]
+                    }
+                }
+            }
+        },
+        "layout": {
+            "properties": {
+                "layoutMode": {
+                    "type": {
+                        "enumeration": [
+                            { "value": "auto", "displayName": "자동(반응형)" },
+                            { "value": "fixed", "displayName": "고정 열 수" }
+                        ]
+                    }
+                },
+                "columns": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "cardWidth": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "cardHeight": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "paddingMode": {
+                    "type": {
+                        "enumeration": [
+                            { "value": "auto", "displayName": "자동" },
+                            { "value": "manual", "displayName": "직접 지정" }
+                        ]
+                    }
+                },
+                "paddingTop": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "paddingRight": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "paddingBottom": {
+                    "type": {
+                        "numeric": true
+                    }
+                },
+                "paddingLeft": {
+                    "type": {
+                        "numeric": true
+                    }
+                }
+            }
+        },
+        "yoy": {
+            "properties": {
+                "increaseColor": {
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "decreaseColor": {
+                    "type": {
+                        "fill": {
+                            "solid": {
+                                "color": true
+                            }
+                        }
+                    }
+                },
+                "yoyPosition": {
+                    "type": {
+                        "enumeration": [
+                            { "value": "belowValue", "displayName": "값 아래" },
+                            { "value": "rightOfValue", "displayName": "값 오른쪽" },
+                            { "value": "rightOfTitle", "displayName": "제목 오른쪽" }
+                        ]
+                    }
+                },
+                "showYoy": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "showYoyForItem": {
+                    "type": {
+                        "bool": true
+                    }
+                },
+                "pairedPriorField": {
+                    "type": {
+                        "enumeration": []
+                    }
+                }
+            }
+        }
+    },
+    "tooltips": {
+        "supportedTypes": {
+            "default": true
+        }
+    },
+    "dataViewMappings": [
+        {
+            "categorical": {
+                "categories": {
+                    "for": {
+                        "in": "category"
+                    },
+                    "dataReductionAlgorithm": {
+                        "top": {}
+                    }
+                },
+                "values": {
+                    "select": [
+                        {
+                            "for": {
+                                "in": "measure"
+                            }
+                        },
+                        {
+                            "for": {
+                                "in": "priorMeasure"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "privileges": []
+}

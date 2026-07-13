@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.tmp/
+webpack.statistics.dev.html
+webpack.statistics.prod.html
